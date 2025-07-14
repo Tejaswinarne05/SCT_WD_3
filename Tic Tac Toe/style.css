@@ -1,0 +1,860 @@
+:root {
+    /* Define some modern color variables for easier theming */
+    --primary-action-color: #E91E63; /* Vibrant Magenta for buttons/active states */
+    --secondary-action-color: #00BCD4; /* Lively Cyan for secondary accents */
+    --dark-text-color: #e0e6ea; /* Lighter text for dark backgrounds */
+    --light-text-color: #bdc3c7; /* Slightly darker light text */
+    --win-color: #4CAF50; /* Brighter Green for wins */
+    --draw-color: #FFC107; /* Noticeable Amber for draws */
+
+    /* NEW: Beautiful, simple gradient colors for the background - Vibrant Night Mode */
+    --background-gradient-start: #10002b; /* Deeper Violet/Indigo */
+    --background-gradient-end: #03001c; /* Very Dark Blue, almost black */
+
+    /* Colors for the "white area" components - adjusted for dark mode contrast */
+    --card-background: #1c252e; /* Slightly darker card background for depth */
+    --inner-card-section-bg: #273748; /* Slightly lighter dark gray for internal sections */
+    --border-color-light: #3b4e60; /* Darker, subtle border */
+    --border-color-medium: #54707e; /* Darker, medium border */
+
+    /* Shadow variables - adjusted for dark background visibility */
+    --shadow-soft: rgba(0, 0, 0, 0.5); /* Stronger soft shadow against dark bg */
+    --shadow-medium: rgba(0, 0, 0, 0.7); /* Stronger medium shadow against dark bg */
+    --shadow-strong: rgba(0, 0, 0, 0.9); /* Stronger strong shadow against dark bg */
+
+    /* Player specific colors - Now more vibrant and distinct */
+    --player-x-color: #FF9800; /* Bold Orange for Player X */
+    --player-o-color: #2196F3; /* Striking Blue for Player O */
+}
+
+body {
+    font-family: 'Times New Roman', Times, serif; /* Changed font to Times New Roman */
+    display: flex;
+    flex-direction: column; /* Allow content to stack vertically */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure full viewport height */
+    margin: 0;
+    color: var(--dark-text-color);
+    position: relative; /* For background animations within the body */
+
+    /* Beautiful, simple gradient background with animation */
+    background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
+    background-size: 400% 400%; /* Larger size for more subtle movement */
+    animation: gradientFlow 25s ease infinite alternate; /* Slower, smoother animation */
+    padding: 20px; /* Add padding to prevent content from touching edges on small screens */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+/* Keyframe for background gradient animation */
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* Creative Background Shapes (Subtle Floating Blobs) */
+.background-blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.3; /* Slightly more visible for dark mode */
+    filter: blur(120px); /* Softer blur, wider spread */
+    z-index: -1; /* Behind everything */
+}
+
+.blob1 {
+    width: 350px; /* Increased size */
+    height: 350px; /* Increased size */
+    background: radial-gradient(circle, var(--primary-action-color), transparent 70%); /* More contrasting color with fade */
+    top: 10%;
+    left: 10%;
+    animation: floatBlob 22s ease-in-out infinite alternate;
+}
+.blob2 {
+    width: 400px; /* Increased size */
+    height: 400px; /* Increased size */
+    background: radial-gradient(circle, var(--secondary-action-color), transparent 70%); /* More contrasting color with fade */
+    bottom: 15%;
+    right: 15%;
+    animation: floatBlob 28s ease-in-out infinite alternate-reverse;
+}
+.blob3 {
+    width: 300px; /* Increased size */
+    height: 300px; /* Increased size */
+    background: radial-gradient(circle, var(--win-color), transparent 70%); /* More contrasting color with fade */
+    top: 40%;
+    right: 20%;
+    animation: floatBlob 20s ease-in-out infinite alternate;
+}
+
+@keyframes floatBlob {
+    0% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(50px, -60px) scale(1.15); /* More pronounced movement and scale */ }
+    50% { transform: translate(0, 70px) scale(0.85); /* More pronounced movement and scale */ }
+    75% { transform: translate(-60px, -50px) scale(1.1); /* More pronounced movement and scale */ }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+
+.game-container {
+    background-color: var(--card-background);
+    padding: 45px; /* Increased padding */
+    border-radius: 25px; /* More rounded corners */
+    box-shadow: 0 15px 30px var(--shadow-medium); /* Stronger shadow */
+    text-align: center;
+    max-width: 550px; /* Increased max-width for a broader look */
+    width: 90%;
+    margin: auto; /* Center the container with auto margins */
+    flex-shrink: 0; /* Prevent shrinking if content is too large */
+
+    /* Entrance animation for the game container */
+    transform: translateY(40px) scale(0.85); /* More pronounced initial state */
+    opacity: 0;
+    animation: fadeInScaleUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, /* Springy entrance */
+                containerGlow 2s ease-in-out infinite alternate; /* Blinking border animation for the container */
+    position: relative; /* For inner animations */
+    overflow: hidden; /* Keep inner elements contained */
+    border: 2px solid var(--border-color-light); /* Added subtle border */
+}
+
+/* Keyframe for the blinking game container border effect */
+@keyframes containerGlow {
+    0% {
+        border-color: var(--primary-action-color);
+        box-shadow: 0 0 25px 8px var(--primary-action-color),
+                    0 15px 30px var(--shadow-medium); /* Keep original shadow */
+    }
+    50% {
+        border-color: var(--secondary-action-color); /* Alternate to secondary color */
+        box-shadow: 0 0 40px 15px var(--secondary-action-color),
+                    0 15px 40px var(--shadow-strong); /* Stronger glow with primary color and increased overall shadow */
+    }
+    100% {
+        border-color: var(--primary-action-color);
+        box-shadow: 0 0 25px 8px var(--primary-action-color),
+                    0 15px 30px var(--shadow-medium);
+    }
+}
+
+
+/* Keyframe for game container entrance */
+@keyframes fadeInScaleUp {
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+h1 {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    color: var(--primary-action-color); /* Matches primary button for cohesion */
+    margin-bottom: 40px; /* Increased margin */
+    font-size: 3.2em; /* Increased font size for impact */
+    text-shadow: 4px 4px 8px var(--shadow-strong); /* Stronger text shadow for contrast */
+}
+
+.game-mode-selection {
+    margin-bottom: 35px; /* Increased margin */
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    justify-content: center; /* Center buttons when wrapped */
+    gap: 18px; /* Larger gap between buttons */
+}
+
+.game-mode-selection button {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    padding: 18px 35px; /* Increased padding */
+    border: none;
+    border-radius: 35px; /* More rounded */
+    cursor: pointer;
+    background-color: var(--inner-card-section-bg); /* Use inner card bg for buttons */
+    color: var(--light-text-color);
+    font-size: 1.35em; /* Increased font size */
+    font-weight: 700; /* Bolder font */
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother bezier curve */
+    box-shadow: 0 6px 12px var(--shadow-medium); /* Darker shadow */
+}
+
+.game-mode-selection button.active {
+    background-color: var(--primary-action-color);
+    color: white;
+    box-shadow: 0 10px 25px rgba(233, 30, 99, 0.8); /* Stronger, colored active shadow with primary color */
+    transform: translateY(-8px) scale(1.15); /* More pronounced lift and scale */
+    animation: pulseBorder 1.5s ease-in-out infinite alternate,
+                blinkingEffect 1s infinite alternate; /* Slower, smoother pulse and blinking */
+}
+
+.game-mode-selection button:not(.active) {
+    animation: blinkingEffect 1.5s infinite alternate; /* Blinking for non-active buttons */
+}
+
+
+@keyframes pulseBorder {
+    0% { box-shadow: 0 10px 25px rgba(233, 30, 99, 0.8); }
+    100% { box-shadow: 0 10px 30px rgba(233, 30, 99, 1); /* Slightly larger, more intense pulse */ }
+}
+
+@keyframes blinkingEffect {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; } /* Subtle blink */
+    100% { opacity: 1; }
+}
+
+
+.game-mode-selection button:hover:not(.active) {
+    background-color: var(--border-color-medium); /* Changed hover color slightly */
+    transform: translateY(-4px) scale(1.06); /* More subtle lift on hover */
+    box-shadow: 0 7px 15px var(--shadow-strong); /* Stronger hover shadow */
+}
+
+/* Settings Section for Marker/Color and Difficulty */
+#settings-section {
+    margin-top: 35px; /* Increased margin */
+    margin-bottom: 35px; /* Increased margin */
+    padding: 35px; /* Increased padding */
+    background: linear-gradient(145deg, var(--inner-card-section-bg), var(--card-background)); /* Subtle gradient for sections, darker */
+    border-radius: 22px; /* More rounded */
+    box-shadow: inset 0 4px 10px var(--shadow-soft); /* Stronger inset shadow */
+    transition: all 0.6s ease-out; /* Slower transition */
+    position: relative; /* For inner glow */
+    overflow: hidden; /* To contain pseudo-elements */
+    border: 1px solid var(--border-color-medium); /* Add border for better definition */
+}
+
+/* Creative: Inner glow for settings section */
+#settings-section::before {
+    content: '';
+    position: absolute;
+    top: -80%; /* Adjusted for larger glow */
+    left: -80%; /* Adjusted for larger glow */
+    width: 260%; /* Larger glow area */
+    height: 260%; /* Larger glow area */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 65%); /* Less opaque glow for dark mode */
+    animation: rotateGlow 28s linear infinite; /* Slower rotation */
+    z-index: -1;
+}
+
+@keyframes rotateGlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+
+#player-marker-selection .marker-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px; /* Increased margin */
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 20px; /* Increased space between inputs */
+}
+
+#player-marker-selection label {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    font-weight: 700; /* Bolder */
+    color: var(--dark-text-color); /* Lighter text for dark backgrounds */
+    white-space: nowrap;
+    font-size: 1.3em; /* Increased font size */
+}
+
+#player-marker-selection input[type="text"] {
+    width: 70px; /* Wider for better marker display */
+    padding: 14px; /* Increased padding */
+    border: 4px solid var(--border-color-medium); /* Thicker border */
+    border-radius: 12px; /* More rounded */
+    text-align: center;
+    font-size: 1.6em; /* Increased font size */
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    box-shadow: inset 0 3px 6px var(--shadow-soft); /* Inset shadow */
+    background-color: var(--card-background); /* Darker input background */
+    color: var(--dark-text-color); /* Lighter text color for input */
+}
+#player-marker-selection input[type="text"]:focus {
+    border-color: var(--primary-action-color);
+    box-shadow: 0 0 0 8px rgba(233, 30, 99, 0.5); /* Stronger glow on focus with primary color */
+    outline: none;
+}
+
+#player-marker-selection input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    width: 55px; /* Increased size */
+    height: 55px; /* Increased size */
+    padding: 0;
+    cursor: pointer;
+    border-radius: 12px; /* More rounded */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px var(--shadow-medium); /* Added initial shadow */
+}
+#player-marker-selection input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+#player-marker-selection input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 12px;
+}
+#player-marker-selection input[type="color"]:hover {
+    transform: scale(1.25); /* More pronounced scale */
+    box-shadow: 0 0 15px var(--shadow-strong); /* Stronger shadow on color picker hover */
+}
+
+
+#player-marker-selection button#apply-markers-colors {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    padding: 16px 32px; /* Increased padding */
+    background-color: var(--win-color);
+    color: white;
+    border: none;
+    border-radius: 12px; /* More rounded */
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
+    margin-top: 28px; /* Increased margin */
+    box-shadow: 0 5px 12px #e9dededd; /* Stronger shadow */
+    font-size: 1.25em; /* Increased font size */
+    animation: blinkingEffect 1.5s infinite alternate; /* Blinking for apply button */
+}
+
+#player-marker-selection button#apply-markers-colors:hover {
+    background-color: #388E3C; /* Slightly darker green */
+    transform: translateY(-5px) scale(1.08); /* More pronounced lift and scale */
+    box-shadow: 0 10px 18px rgba(0,0,0,0.7); /* Stronger shadow on hover */
+}
+
+/* Difficulty Selection */
+#difficulty-selection {
+    margin-top: 30px; /* Increased margin */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: all 0.6s ease-out; /* Slower transition */
+    gap: 12px; /* Space between difficulty buttons */
+}
+
+#difficulty-selection label {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    margin-right: 25px; /* Increased margin */
+    font-weight: 700; /* Bolder */
+    color: var(--dark-text-color); /* Lighter text */
+    margin-bottom: 15px; /* Increased margin */
+    font-size: 1.3em; /* Increased font size */
+}
+
+#difficulty-selection button {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    padding: 13px 28px; /* Increased padding */
+    border: 2px solid var(--border-color-medium);
+    border-radius: 12px; /* More rounded */
+    background-color: var(--inner-card-section-bg);
+    color: var(--light-text-color);
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother bezier curve */
+    box-shadow: 0 4px 10px var(--shadow-medium);
+    font-size: 1.2em; /* Increased font size */
+    animation: blinkingEffect 1.5s infinite alternate; /* Blinking for difficulty buttons */
+}
+
+#difficulty-selection button.active {
+    background-color: var(--primary-action-color);
+    color: white;
+    border-color: var(--primary-action-color);
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.7); /* Stronger shadow with primary color */
+    transform: translateY(-5px) scale(1.12); /* More pronounced lift and scale */
+    animation: pulseBorder 1.5s ease-in-out infinite alternate,
+                blinkingEffect 1s infinite alternate; /* Slower, smoother pulse and blinking */
+}
+
+#difficulty-selection button:hover:not(.active) {
+    background-color: var(--border-color-medium); /* Changed hover color */
+    transform: translateY(-3px) scale(1.05); /* More subtle lift */
+    box-shadow: 0 6px 12px var(--shadow-strong); /* Stronger hover shadow */
+}
+
+.hidden {
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 0.6s ease, height 0.6s ease, padding 0.6s ease, margin 0.6s ease, border 0.6s ease; /* Slower transition */
+}
+#settings-section:not(.hidden),
+#difficulty-selection:not(.hidden) {
+    opacity: 1;
+    height: auto;
+    padding-top: 35px; /* Adjusted padding */
+    padding-bottom: 35px; /* Adjusted padding */
+    margin-top: 35px; /* Adjusted margin */
+    margin-bottom: 35px; /* Adjusted margin */
+    border: initial;
+    pointer-events: auto;
+}
+
+
+.game-message {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    margin-bottom: 40px; /* Increased margin */
+    font-size: 2.2em; /* Increased font size for impact */
+    font-weight: bold;
+    min-height: 1.8em;
+    transition: color 0.5s ease, transform 0.4s ease, text-shadow 0.5s ease; /* Slower transitions */
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1); /* Brighter, wider glow for message */
+    position: relative; /* For possible future text animation */
+    color: var(--dark-text-color); /* Ensure message is visible against dark background */
+}
+
+/* Apply these classes in JS based on win/draw */
+.game-message.win {
+    color: var(--win-color);
+    transform: scale(1.25); /* More pronounced scale */
+    animation: messagePop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Springy pop */
+}
+.game-message.draw {
+    color: var(--draw-color);
+    transform: scale(1.2); /* More pronounced scale */
+    animation: messageShake 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; /* More expressive shake */
+}
+
+@keyframes messagePop {
+    0% { transform: scale(0.6); opacity: 0; }
+    50% { transform: scale(1.4); opacity: 1; }
+    100% { transform: scale(1); }
+}
+@keyframes messageShake {
+    0%, 100% { transform: translateX(0) rotateZ(0); }
+    20% { transform: translateX(-12px) rotateZ(-4deg); }
+    40% { transform: translateX(12px) rotateZ(4deg); }
+    60% { transform: translateX(-12px) rotateZ(-4deg); }
+    80% { transform: translateX(12px) rotateZ(4deg); }
+}
+
+
+.scoreboard {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 30px; /* Increased margin */
+    padding: 22px; /* Increased padding */
+    background-color: var(--inner-card-section-bg);
+    border-radius: 15px; /* More rounded */
+    font-weight: bold;
+    color: var(--dark-text-color); /* Lighter text */
+    box-shadow: inset 0 4px 10px var(--shadow-soft); /* Stronger inset shadow */
+    flex-wrap: wrap;
+    transition: all 0.5s ease; /* Slower transition */
+    border: 2px solid var(--border-color-medium); /* Stronger border */
+    font-size: 1.4em; /* Increased font size */
+}
+
+.scoreboard span {
+    margin: 10px 20px; /* Increased margin */
+    white-space: nowrap;
+    transition: color 0.4s ease, transform 0.4s ease; /* Slower transition */
+}
+/* Optional: Animate scoreboard numbers when they change (requires JS class toggle) */
+.scoreboard span.score-pulse {
+    animation: scorePulse 0.6s ease-out; /* Slower pulse */
+}
+@keyframes scorePulse {
+    0% { transform: scale(1); color: inherit; }
+    50% { transform: scale(1.3); color: var(--primary-action-color); } /* More pronounced scale and color change */
+    100% { transform: scale(1); color: inherit; }
+}
+
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 15px; /* Increased gap */
+    margin: 0 auto 50px auto; /* Increased margin */
+    border: 6px solid var(--primary-action-color); /* Thicker board border */
+    border-radius: 20px; /* More rounded corners */
+    max-width: 480px; /* Set a max-width for the board itself */
+    width: 90%; /* Make it responsive */
+    aspect-ratio: 1 / 1; /* Maintain square aspect ratio for the board */
+    box-shadow: 0 12px 30px var(--shadow-medium); /* Stronger shadow */
+    transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease; /* Slower transition */
+    /* Removed boardGlow animation from here */
+}
+
+
+@keyframes boardPopIn {
+    0% { transform: scale(0.6) rotateX(-40deg); opacity: 0; }
+    100% { transform: scale(1) rotateX(0deg); opacity: 1; }
+}
+
+
+.cell {
+    /* Inherit dimensions from grid-template-columns/rows */
+    height: 100%; /* Make cell height fill its grid area */
+    background-color: var(--card-background); /* Cells are dark */
+    border: 3px solid var(--border-color-light);
+    border-radius: 15px; /* More rounded */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5.5em; /* Increased font size for markers */
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.4s ease, box-shadow 0.3s ease; /* Slower transitions */
+    position: relative; /* For ripple effect */
+    overflow: hidden; /* To contain the ripple */
+    /* Add a subtle inner shadow or light gradient to dark cells */
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.3); /* Stronger inset shadow for dark cells */
+    color: var(--light-text-color); /* Default cell text color, for empty cells */
+}
+
+/* Styles for Player X's marker - Bold Orange */
+.cell.player-x {
+    color: var(--player-x-color); /* Apply Player X's color */
+    text-shadow: 0 0 12px rgba(255, 152, 0, 0.8); /* Stronger glow for X */
+}
+
+/* Styles for Player O's marker - Striking Blue */
+.cell.player-o {
+    color: var(--player-o-color); /* Apply Player O's color */
+    text-shadow: 0 0 12px rgba(33, 150, 243, 0.8); /* Stronger glow for O */
+}
+
+
+.cell:hover {
+    background-color: var(--inner-card-section-bg); /* Slightly lighter dark on hover */
+    transform: scale(1.08) translateY(-5px); /* More pronounced lift on hover */
+    box-shadow: 0 12px 25px var(--shadow-strong); /* More pronounced shadow on hover */
+}
+
+/* Ripple effect on cell click (CSS-only for demonstration, typically combined with JS) */
+.cell.ripple::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2); /* More subtle white ripple for dark mode */
+    width: 0;
+    height: 0;
+    animation: ripple 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Slower, smoother ripple */
+    transform: translate(-50%, -50%); /* Center the ripple */
+    top: var(--y, 50%);
+    left: var(--x, 50%);
+}
+
+@keyframes ripple {
+    from {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    to {
+        width: 320px; /* Expands beyond cell size */
+        height: 320px;
+        opacity: 0;
+    }
+}
+
+
+/* Animation for when a cell is marked */
+.cell.marked {
+    animation: cellPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy pop */
+}
+@keyframes cellPop {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.4); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+
+/* Win animation */
+.cell.win-animation {
+    animation: winCellEffect 1.5s ease-out forwards; /* Slower win animation */
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes winCellEffect {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0px 0px rgba(0, 0, 0, 0);
+        background-color: var(--card-background); /* Ensure it starts as dark */
+    }
+    50% {
+        transform: scale(1.3); /* More pronounced scale */
+        box-shadow: 0 0 50px 25px var(--win-color); /* Brighter, wider glow */
+        background-color: rgba(76, 175, 80, 0.5); /* Slightly more opaque transparent green */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 40px 18px var(--win-color); /* Stronger glow at end */
+        background-color: rgba(76, 175, 80, 0.6); /* More opaque */
+    }
+}
+
+/* Draw animation for the game board */
+.game-board.draw-animation {
+    animation: drawShake 1s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* More expressive shake, longer duration */
+    border-color: var(--draw-color); /* Highlight border on draw */
+    box-shadow: 0 12px 30px var(--draw-color); /* Highlight shadow on draw */
+}
+
+@keyframes drawShake {
+    0% { transform: translateX(0) rotateZ(0deg); }
+    15% { transform: translateX(-15px) rotateZ(-5deg); } /* More movement */
+    30% { transform: translateX(15px) rotateZ(5deg); }
+    45% { transform: translateX(-15px) rotateZ(-5deg); }
+    60% { transform: translateX(15px) rotateZ(5deg); }
+    75% { transform: translateX(-8px) rotateZ(-3deg); }
+    100% { transform: translateX(0) rotateZ(0deg); }
+}
+
+/* NEW: Winning Line Animation (requires a pseudo-element or separate div to be added by JS) */
+.game-board.win-line-animate::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(to right, var(--win-color) 0%, rgba(255,255,255,0.95) 50%, var(--win-color) 100%);
+    opacity: 0;
+    animation: winningLineFadeIn 1.2s ease-out forwards;
+    z-index: 5; /* Above cells */
+    /* These will be dynamically set by JS based on win condition */
+    /* For horizontal wins */
+    /* width: 100%; height: 12px; top: calc(var(--line-position) * 100% / 3); left: 0; */
+    /* For vertical wins */
+    /* width: 12px; height: 100%; left: calc(var(--line-position) * 100% / 3); top: 0; */
+    /* For diagonal wins */
+    /* transform-origin: center; width: 160%; height: 12px; top: 50%; left: -30%; transform: rotate(45deg); */
+}
+
+@keyframes winningLineFadeIn {
+    0% { opacity: 0; transform: scaleX(0); }
+    50% { opacity: 1; transform: scaleX(1.15); }
+    100% { opacity: 1; transform: scaleX(1); }
+}
+
+
+#restart-button {
+    font-family: 'Times New Roman', Times, serif; /* Changed font */
+    padding: 22px 45px; /* Increased padding */
+    font-size: 1.5em; /* Increased font size */
+    background-color: #3b4e60; /* Darker, more prominent grey for restart */
+    color: white;
+    border: none;
+    border-radius: 45px; /* More rounded */
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+    position: relative; /* For potential button specific animations */
+    overflow: hidden; /* For hover effects */
+    animation: blinkingEffect 1.5s infinite alternate; /* Blinking for restart button */
+    margin-top: 35px; /* Add margin above restart button */
+}
+
+#restart-button:hover {
+    background-color: #314253;
+    transform: translateY(-5px) scale(1.06); /* More pronounced lift and scale */
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+/* New: Subtle glowing border for restart button on hover */
+#restart-button::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50px; /* Match button border-radius + padding */
+    border: 4px solid transparent;
+    background: linear-gradient(45deg, var(--primary-action-color), var(--secondary-action-color)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: all 0.5s ease;
+    opacity: 0;
+    z-index: -1;
+}
+
+#restart-button:hover::before {
+    opacity: 1;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    animation: glowingBorder 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes glowingBorder {
+    0% { border-color: var(--primary-action-color); transform: scale(1); }
+    100% { border-color: var(--secondary-action-color); transform: scale(1.05); }
+}
+
+
+/* Confetti effect (slightly adjusted colors for vibrancy) */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.confetti {
+    position: absolute;
+    width: 18px; /* Slightly larger confetti */
+    height: 18px; /* Slightly larger confetti */
+    background-color: #ffcc00; /* Default, will be random or player color */
+    opacity: 0;
+    animation: fall 4s cubic-bezier(0.4, 0, 0.6, 1) forwards; /* Smoother fall */
+    border-radius: 50%;
+    transform-origin: center center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2); /* Subtle shadow on confetti */
+}
+
+@keyframes fall {
+    0% {
+        transform: translate(var(--start-x, 0), -150px) rotateZ(0deg) scale(0.3);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--end-x, 0), var(--end-y, 100vh)) rotateZ(var(--rotation, 1440deg)) scale(1.2); /* Full rotation and slight scale up */
+        opacity: 0;
+    }
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Reduce overall padding for smaller screens */
+    }
+
+    .game-container {
+        padding: 30px 20px; /* Adjusted padding, especially horizontal */
+        width: 98%; /* Even wider on small screens */
+        max-width: none; /* Remove max-width constraint for better filling */
+        border-radius: 20px; /* Adjusted for smaller screen */
+        box-shadow: 0 10px 20px var(--shadow-medium); /* Adjusted shadow */
+    }
+
+    h1 {
+        font-size: 2.5em; /* Adjusted font size for smaller screens */
+        margin-bottom: 30px; /* Adjusted margin */
+    }
+
+    .game-mode-selection {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 12px; /* Reduce gap */
+    }
+
+    .game-mode-selection button,
+    #difficulty-selection button,
+    #restart-button {
+        padding: 14px 25px; /* Adjusted padding */
+        font-size: 1.1em; /* Adjusted font size */
+        margin: 0 auto; /* Center individual buttons */
+        width: 85%; /* Make buttons take up more width */
+        max-width: 280px; /* Limit button width */
+        border-radius: 30px; /* Adjusted for smaller screen */
+    }
+
+    .game-mode-selection button.active {
+        box-shadow: 0 8px 18px rgba(233, 30, 99, 0.7);
+        transform: translateY(-4px) scale(1.1);
+    }
+
+    #settings-section {
+        padding: 25px; /* Adjusted padding */
+        margin-top: 25px;
+        margin-bottom: 25px;
+        border-radius: 18px;
+        box-shadow: inset 0 3px 8px var(--shadow-soft);
+    }
+
+    #player-marker-selection label,
+    #difficulty-selection label {
+        font-size: 1.1em; /* Adjusted font size */
+        margin-right: 12px; /* Adjusted margin */
+        margin-bottom: 10px; /* Adjusted margin */
+        text-align: center;
+        width: 100%; /* Make labels take full width to center */
+    }
+    
+    #player-marker-selection .marker-input-group {
+        flex-direction: column; /* Stack marker inputs vertically */
+        gap: 12px; /* Reduce gap */
+    }
+
+    #player-marker-selection input[type="text"] {
+        width: 60px; /* Adjusted width */
+        padding: 12px; /* Adjusted padding */
+        font-size: 1.3em; /* Adjusted font size */
+    }
+    #player-marker-selection input[type="color"] {
+        width: 45px; /* Adjusted size */
+        height: 45px; /* Adjusted size */
+    }
+    #player-marker-selection button#apply-markers-colors {
+        padding: 12px 25px;
+        font-size: 1.1em;
+        margin-top: 20px;
+        width: auto; /* Allow button to size naturally */
+    }
+
+    #difficulty-selection {
+        flex-direction: column; /* Stack difficulty buttons vertically */
+        gap: 12px; /* Reduce gap */
+    }
+
+    .game-message {
+        font-size: 1.6em; /* Adjusted font size */
+        margin-bottom: 30px; /* Adjusted margin */
+    }
+
+    .scoreboard {
+        font-size: 1.1em; /* Adjusted font size */
+        padding: 15px;
+        margin-bottom: 25px;
+        flex-direction: column; /* Stack scoreboard items vertically if needed */
+        gap: 8px; /* Gap for stacked items */
+    }
+    .scoreboard span {
+        margin: 6px 10px;
+    }
+
+    .game-board {
+        gap: 10px; /* Smaller gap */
+        width: 95%; /* Wider on small screens */
+        max-width: 350px; /* Limit max size for board on small screens */
+        aspect-ratio: 1 / 1; /* Keep it square */
+        margin-bottom: 35px; /* Adjusted margin */
+        border-width: 5px; /* Adjusted border thickness */
+        border-radius: 15px; /* Adjusted border radius */
+        box-shadow: 0 8px 20px var(--shadow-medium); /* Adjusted shadow */
+    }
+
+    .cell {
+        font-size: 4em; /* Adjusted marker size for smaller cells */
+        border-radius: 10px; /* Adjusted border radius for cells */
+        height: 100%; /* Ensure cells fill their grid area height */
+    }
+
+    #restart-button {
+        padding: 18px 35px;
+        font-size: 1.2em;
+        border-radius: 40px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+        margin-top: 25px;
+    }
+}
