@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Tic-Tac-Toe</h1>
+
+        <div class="game-mode-selection">
+            <button id="pvp-mode" class="active">Player vs Player</button>
+            <button id="pvc-mode">Player vs Computer</button>
+        </div>
+
+        <div id="settings-section">
+            <div id="player-marker-selection">
+                <div class="marker-input-group">
+                    <label for="player1-marker">Player 1 Marker:</label>
+                    <input type="text" id="player1-marker" maxlength="1" value="X">
+                    <input type="color" id="player1-color" value="#dc3545">
+                </div>
+                <div class="marker-input-group">
+                    <label for="player2-marker">Player 2 Marker:</label>
+                    <input type="text" id="player2-marker" maxlength="1" value="O">
+                    <input type="color" id="player2-color" value="#007bff">
+                </div>
+                <button id="apply-markers-colors">Apply</button>
+            </div>
+
+            <div id="difficulty-selection" class="hidden">
+                <label>Computer Difficulty:</label>
+                <button id="difficulty-easy" class="active">Easy</button>
+                <button id="difficulty-medium">Medium</button>
+                <button id="difficulty-hard">Hard</button>
+            </div>
+        </div>
+
+        <div id="game-message" class="game-message"></div>
+
+        <div class="scoreboard">
+            <span id="player1-score">Player 1 (X): 0</span>
+            <span id="player2-score">Player 2 (O): 0</span>
+            <span id="draws-score">Draws: 0</span>
+        </div>
+
+        <div class="game-board" id="game-board">
+            <div class="cell" data-cell-index="0"></div>
+            <div class="cell" data-cell-index="1"></div>
+            <div class="cell" data-cell-index="2"></div>
+            <div class="cell" data-cell-index="3"></div>
+            <div class="cell" data-cell-index="4"></div>
+            <div class="cell" data-cell-index="5"></div>
+            <div class="cell" data-cell-index="6"></div>
+            <div class="cell" data-cell-index="7"></div>
+            <div class="cell" data-cell-index="8"></div>
+        </div>
+        <button id="restart-button">Restart Game</button>
+    </div>
+
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <audio id="place-sound" src="sounds/place.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="sounds/win.mp3" preload="auto"></audio>
+    <audio id="draw-sound" src="sounds/draw.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
